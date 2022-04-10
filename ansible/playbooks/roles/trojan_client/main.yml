@@ -1,0 +1,2 @@
+- name: Install trojan software
+  import_tasks: install_trojan.yaml
