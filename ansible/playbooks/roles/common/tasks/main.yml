@@ -1,9 +1,17 @@
 ---
 
+- name: Update all packages to their latest version
+  apt:
+    update_cache: yes
+    name: "*"
+    state: latest
+
 - name: Install build tools
   apt:
     update_cache: yes
     pkg:
+      - gcc
+      - g++
       - git
       - cmake
       - ninja-build

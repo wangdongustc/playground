@@ -4,20 +4,42 @@
   apt:
     name: nginx
     update_cache: yes
-  become: yes
+
+- name: Install nginx config file
+  template:
+    src: default.conf.j2
+    dest: /etc/nginx/sites-available/default
+    backup: yes
+
+- name: Alive nginx config file
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+
+- name: Enable the nginx service
+  systemd:
+    name: nginx
+    enabled: yes
+    daemon_reload: yes
+    state: restarted
+
+- name: Allow nginx in UFW
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
 
 - name: Install and refresh snap
-  command: {{ item }}
+  command: "{{ item }}"
   with_items:
     - 'snap install core'
     - 'snap refresh core'
-  become: yes
 
 - name: Install certbot
   snap:
     name: certbot
     classic: yes
-  become: yes
 
 - name: Adding certbot symlink
   file:
@@ -27,9 +49,6 @@
     group: root
     state: link
     mode: '0755'
-  become: yes
 
--name: Run certbot
-  command: certbot -n --nginx certonly --domains vv.wangdongustc.com
-  
-    
+- name: Run certbot
+  command: "certbot -n --nginx certonly --domains {{ domain }} --agree-tos --email {{ email }}"

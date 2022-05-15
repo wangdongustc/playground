@@ -1,3 +1,22 @@
 ---
 
+- name: Config trojan as server
+  template:
+    src: templates/config.json.j2
+    dest: /usr/local/etc/trojan/config.json
 
+- name: Set trojan service run as root
+  command: sed -i 's/User=nobody/User=root/g' /lib/systemd/system/trojan.service
+
+- name: Enable the trojan service
+  systemd:
+    name: trojan
+    enabled: yes
+    daemon_reload: yes
+    state: restarted
+
+- name: Allow trojan in UFW
+  ufw:
+    rule: allow
+    port: '443'
+    proto: tcp
