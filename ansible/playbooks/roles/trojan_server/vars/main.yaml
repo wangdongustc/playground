@@ -1,0 +1,5 @@
+---
+
+letsencrypt_folder: "/etc/letsencrypt/live"
+certificate_crt: "{{ letsencrypt_folder }}/{{ domain }}/fullchain.pem"
+private_key: "{{ letsencrypt_folder }}/{{ domain }}/privkey.pem"

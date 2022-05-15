@@ -1,0 +1,52 @@
+---
+
+- name: Update all packages to their latest version
+  apt:
+    update_cache: yes
+    name: "*"
+    state: latest
+
+- name: Install build tools
+  apt:
+    update_cache: yes
+    pkg:
+      - gcc
+      - g++
+      - git
+      - cmake
+      - ninja-build
+      - libboost-dev
+      - libboost-program-options-dev
+      - libboost-system-dev
+      - libmysqlclient-dev
+      - libssl-dev
+  become: yes
+
+- name: Build and install trojan
+  block:
+  - name: Creating tmp build folder
+    tempfile:
+      state: directory
+      suffix: trojan-build
+    register: build_dir
+
+  - name: Get trojan source
+    git:
+      repo: "https://github.com/trojan-gfw/trojan"
+      dest: '/tmp/trojan'
+      version: v1.16.0
+
+  - name: Build trojan
+    command:
+      cmd: '{{ item }}'
+      chdir: '{{ build_dir.path }}'
+    with_items:
+      - 'cmake /tmp/trojan -GNinja -DCMAKE_BUILD_TYPE=Release'
+      - 'cmake --build .'
+      - 'cmake --install .'
+
+  always:
+  - name: cleaning up
+    file:
+      path: '{{ build_dir.path }}'
+      state: absent

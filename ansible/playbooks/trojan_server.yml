@@ -1,0 +1,9 @@
+---
+
+- name: Setup trojan servers
+  hosts: all
+  roles:
+    - common
+    - nginx
+    - trojan_server
+  become: yes

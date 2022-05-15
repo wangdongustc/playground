@@ -1,0 +1,15 @@
+---
+
+- name: Setup trojan client
+  hosts: localhost
+  vars_prompt:
+    - name: server_name
+      prompt: Please enter remote server name
+      private: no
+    
+    - name: password
+      prompt: Please enter password
+      private: no
+  roles:
+    - trojan_client
+  become: yes
