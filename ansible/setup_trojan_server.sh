@@ -2,11 +2,11 @@
 
 # modify the inventory file in /etc/ansible/hosts
 # e.g.
-# vultr:
+# trojan:  # must be the same with the '-l' option below.
 #     hosts:
 #         hostname:
 #             domain: hostdomain.com
 #             password: my_password
 #             email: wangdong115@foxmail.com
 
-ansible-playbook -u root playbooks/trojan_server.yml -v $@
+ansible-playbook -l trojan -u root playbooks/trojan_server.yml -v $@
