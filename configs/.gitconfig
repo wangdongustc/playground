@@ -1,0 +1,9 @@
+[http]
+	proxy = socks5h://localhost:1080
+[https]
+	proxy = socks5h://localhost:1080
+[user]
+	email = wangdong115@foxmail.com
+	name = Darren Wang
+[core]
+	editor = vim
